@@ -1,5 +1,4 @@
 from collections import deque as queue
-
 import numpy as np
 
 dRow = [-1, 0, 1, 0]
@@ -37,6 +36,54 @@ def findPath_ver2(expands: list, grid):
                         path.reverse()
                         return path
                     break
+
+class MultiQueue:
+    """
+    Lớp đối tượng hàng đợi đa điểm.
+    """
+    def __init__(self, n_queues):
+        self.queues = [queue() for _ in range(n_queues)]
+
+    def append(self, item, queue_index):
+        self.queues[queue_index].append(item)
+
+    def popleft(self, queue_index):
+        return self.queues[queue_index].popleft()
+
+    def __bool__(self):
+        return any(self.queues)
+
+
+def bfs_multi(grid, vis, row, col):
+    expands = []
+    n_queues = np.where(grid > 0)
+    q = MultiQueue(len(n_queues))
+    q.append((col, row), grid[col][row])
+    vis[row][col] = True
+
+    stop = False
+    while q.__bool__():
+        cell = q.popleft(grid[col][row])
+        x = cell[0]
+        y = cell[1]
+        if not stop:
+            expands.append([x, y])
+        if grid[y][x] == -1:
+            stop = True
+            break
+        for i in range(4):
+            adjx = x + dRow[i]
+            adjy = y + dCol[i]
+            if isValid(vis, adjy, adjx, grid.shape):
+                q.append((adjx, adjy), grid[adjy][adjx])
+                vis[adjy][adjx] = True
+    x, y = expands[-1]
+    if grid[y][x] != -1:
+        return None
+    if len(expands) == 1:
+        return None
+    pathFinal = findPath_ver2(expands, np.arange(400).reshape(20, 20))
+    return pathFinal
 
 
 def BFS(grid, vis, row, col):

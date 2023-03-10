@@ -16,8 +16,6 @@ pygame.init()
 TIMER = 0
 publish_time_sync = False
 
-ACCELERATION = 3
-
 start_signal = False
 
 dict_input = list()
@@ -35,9 +33,9 @@ arrBack = loadPointPort("csv_file/arrBack.csv")
 arrOutput = loadPointPort("csv_file/arrOutput.csv")
 arrDelivery = loadPointPort("csv_file/arrDelivery.csv")
 arrCrossPoint = loadPointPort("csv_file/arrPoint.csv")
+
 r = redis.Redis(host="localhost", port=6379, db=1, password="")
 r2 = redis.Redis(host="localhost", port=6379, db=15, password="")  # Db đường về
-
 r3 = redis.Redis(host="localhost", port=6379, db=14, password="")
 
 RoamMap1 = {
@@ -46,7 +44,6 @@ RoamMap1 = {
     3: [[2, 68], [2, 65], [34, 65], [34, 68]],
     4: [[67, 68], [67, 64], [37, 64], [37, 68]],
 }
-
 
 def check_pos_new1(x, y):
     if y == 2:
@@ -105,7 +102,7 @@ def on_message_get_way(mosq, obj, msg):
                 ways.append(json.loads(r3.get(message_info)))
         costs = []  # list cost của tất cả các trường hợp đường của AGV
         """
-        Khi đã có đủ số lượng đường có thể có của AGV thì tiến hành lập lịch dựa trên thời gian và va trạm
+        Khi đã có đủ số lượng đường có thể có của AGV thì tiến hành lập lịch dựa trên thời gian và va chạm
         """
         for way in ways:
             costs.append(calculateCost(way, arrCrossPoint))
@@ -191,7 +188,6 @@ password = "123"
 # client_id khong được trùng
 client = mqtt.Client(client_id)
 client.username_pw_set(username, password)
-number_of_robot = 350
 # set callback function
 
 client.message_callback_add("+/location", on_message_location)

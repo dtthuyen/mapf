@@ -32,7 +32,7 @@ def read_csv(filename):
 
 # arrMap = read_csv("csv_file/map350danhdauvitri.csv")
 arrMap = read_csv("csv_file/mapConvert.csv")
-
+# arrMap = read_csv("csv_file/convert2.csv")
 def draw(arrVarMap):
     j = 2
     x = 0
@@ -208,13 +208,13 @@ while run:
     if start_button.draw(screen):
         client.publish("server", payload="start".encode(), qos=0, retain=False)
         print("start")
-    if exit_button.draw(screen):
-        client.publish("server", payload="stop".encode(), qos=0, retain=False)
-        print("stop")
-    if on_button.draw(screen):
-        print("on")
-    if off_button.draw(screen):
-        print("off")
+    # if exit_button.draw(screen):
+    #     client.publish("server", payload="stop".encode(), qos=0, retain=False)
+    #     print("stop")
+    # if on_button.draw(screen):
+    #     print("on")
+    # if off_button.draw(screen):
+    #     print("off")
     for item in device.copy():
         data = device[item].split("/")
         x = float(data[0])
@@ -226,9 +226,9 @@ while run:
             pygame.draw.circle(screen, (0, 0, 255), [matrix(x), matrix(y)], 4)
         else:
             pygame.draw.circle(screen, (255, 0, 0), [matrix(x), matrix(y)], 4)
-    blit_text(screen, label1, (720, 50), font)#920, 20
+    # blit_text(screen, label1, (720, 50), font)#920, 20
     blit_text(screen, text, (720, 240), font)#900, 300
-    blit_text(screen, label2, (720, 510), font)#950, 720
+    # blit_text(screen, label2, (720, 510), font)#950, 720
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

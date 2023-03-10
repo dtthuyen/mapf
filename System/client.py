@@ -27,11 +27,9 @@ rd.seed(123)
 
 index_x = [7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46, 49, 52, 55, 58, 61]
 index_y = [[5, 6], [64, 65]]
+down_point = np.array([i for i in range(7, 65, 3)])
+up_point = np.array([i for i in range(5, 63, 3)])
 
-pph = 0 # package per hour
-ppm = 0 # package per minute
-total_package = 0
-start_time = 0
 def check_pos_new1(x, y):
     RoamMap1 = {
         1: [[3, 2], [3, 6], [32, 6], [32, 2]],
@@ -55,10 +53,6 @@ def check_pos_new1(x, y):
             return RoamMap1[3]
         elif x > 35:
             return RoamMap1[4]
-
-
-down_point = np.array([i for i in range(7, 65, 3)])
-up_point = np.array([i for i in range(5, 63, 3)])
 
 
 def check_in_RoamMap(x, y):
@@ -140,6 +134,7 @@ def toQueue(id, graph, robot_list: list, checkpoint: np.ndarray = np.array([])):
 
     vis_temp = vis.copy()
     change_path = BFS(list_vertices, vis_temp, start_point[1], start_point[0])
+    print('huyen',list_vertices, vis_temp, start_point[1], start_point[0], id)
     if change_path is None:
         return
     x_plus = cur_pos_x - start_point[0]
@@ -711,7 +706,7 @@ while True:
 
                         else:
                             Robot.local_check_pos[int(finalPath[-1][1])][int(finalPath[-1][0])] = -1
-    num_robot_per_cycle = 5
+
     InQueueHasPack = []
     InQueueNoPack = []
     for ID_CHECK in InQueue:
@@ -722,7 +717,7 @@ while True:
             InQueueNoPack.append(ID_CHECK)
     rd.shuffle(InQueueHasPack)
     rd.shuffle(InQueueNoPack)
-    num_robot_per_cycle = 7
+    num_robot_per_cycle = 8
 
     for ID_CHECK in InQueueHasPack:
         robot_x: Robot = robot_list[ID_CHECK - 1]
@@ -770,6 +765,8 @@ while True:
                                                      [int(last_robot_early_stop.x), int(last_robot_early_stop.y)])
                 if robot_x.check_routing:
                     num_robot_per_cycle -= 1
+                    if ID_CHECK == 65:
+                        print(robot_x, num_robot_per_cycle)
             else:
                 robot_x.check_routing = checkTraffic(robot_x, Robot.check_pos, None)
                 if robot_x.check_routing:
