@@ -36,6 +36,10 @@ def bfs_multi_robot(start_positions, goal_positions, obstacles):
     q.append(start_state, 0)
     visited.add(start_state)
 
+    # a= set()
+    # a.add([(0, 0), (1, 1), (2, 2), (3, 3)])
+    # a.add([(0, 0), (1, 1), (2, 2), (3, 3)])
+    # print('gggg', a)
     while True:
         # print(q)
         current_state = q.popleft(0, None)
@@ -49,17 +53,20 @@ def bfs_multi_robot(start_positions, goal_positions, obstacles):
             for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
                 new_x = start_positions[robot_id][0] + dx
                 new_y = start_positions[robot_id][1] + dy
-                if new_x < 0:
-                    new_x = 0
-                if new_y < 0:
-                    new_y = 0
+                # if new_x < 0:
+                #     new_x = 0
+                # if new_y < 0:
+                #     new_y = 0
                 new_pos = (new_x, new_y)
                 if new_pos in obstacles:
                     continue
-                print(current_state)
+
                 new_positions = list(current_state)
+                print(new_positions)
                 new_positions[robot_id] = new_pos
+                print('ommm',new_positions)
                 new_state = tuple(new_positions)
+                print('state',new_state)
                 if new_state not in visited:
                     visited.add(new_state)
                     q.append(new_state, robot_id)

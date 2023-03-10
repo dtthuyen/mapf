@@ -3,7 +3,6 @@ from collections import defaultdict
 from tqdm import tqdm
 import __redis as re
 from graphUtils import Edge, Graph
-# from sql2 import importTempWay, importWayBack
 from utils import (
     convertPoint2String,
     convertWay,
@@ -41,11 +40,9 @@ def convertCrossPoint2FinalWay(crossWay: list, map_rows: list):
         if i == len(crossWay) - 1:
             break
         end_point = crossWay[i + 1]
-        # print("xet {} va {}".format(start_point, end_point))
         startLocation = mPoint(start_point[0], start_point[1])
 
         start_direct = map_rows[startLocation - 1]
-        # print(start_direct.split(","))
         for direct in start_direct.split(","):
             pathTemp = []
             result = direct
@@ -53,7 +50,6 @@ def convertCrossPoint2FinalWay(crossWay: list, map_rows: list):
             while len(result) == 1:
                 result, crossGoal = checkEgde(crossGoal, result)
                 pathTemp.append(crossGoal)
-                # print("duong di ", crossGoal)
                 if crossGoal in arrCorner:
                     break
             if pathTemp[-1] == end_point:
@@ -93,7 +89,6 @@ for i in tqdm(range(len(arrOutport))):
 
 allEdges = []
 
-# them duong co so dua tren diem Corner
 for crossPoint in arrCross:  # tim tu corner den corner, cross den corner
     crossLocation = mPoint(xX=crossPoint[0], yY=crossPoint[1])
     direction = map_rows[crossLocation - 1]
@@ -234,8 +229,6 @@ print(len(list_IOway))
 
 for i in tqdm(range(len(list_IOway))):
     IO_point = list_IOway[i]
-    # print("tim duong {}".format(IO_point))
-
     inPort = IO_point[0]
     outPort = IO_point[1]
     x_in, y_in = inPort.split(",")
@@ -258,55 +251,13 @@ for i in tqdm(range(len(list_IOway))):
         goal = convertPoint2String(pMatrixInt(outport))
         pathDetail = convertCrossPoint2FinalWay(PathIO, map_rows)
 
-        # PathIO = convertWay2String(PathIO)
         pathDetail = convertWay2String(pathDetail)
-        # importTempWay(name="", path=PathIO, path1d=path1d, pdetail=pathDetail, cost="", start=start, end=end,
-        #             goal=goal)
         PathIO = convertCrossPoint2FinalWay(PathIO, map_rows)
         re.set_coordinate_to_redis(PathIO, IO_point[0], IO_point[1])
-#
-# print(
-#     "=================== Tìm đường về từ outport về đường default ==========================="
-# )
 
-# create way back to default path
-# for outport in finalBaseLineDict.keys():
-#     baseLine = finalBaseLineDict[outport]
-#     endPoint = baseLine["end"]
-#     x_end, y_end = pMatrixInt(endPoint)
-#     backPoints = caculatePointBack(
-#         point=[x_end, y_end], arrBack=arrBack, num_way=5
-#     )  # using manhattan distance to find the point back.
-#     for backPoint in backPoints:
-#         src = mPoint(x_end, y_end)
-#         goal = mPoint(backPoint[0], backPoint[1])
-#         PathIO = graphMap.a_star_algorithm(src, goal)
-#         if PathIO is None:
-#             print("khong tim thay duong {}".format((x_end, y_end, backPoint)))
-#             print(graphMap.graph[mPoint(1, 2)][0].dest)
-#             assert "Khong tim thay duong"
-#         else:
-#             path1d = convertWay1dToString(PathIO)
-#             PathIO = convertWay(PathIO)
-#             PathIO = convertCrossPoint2FinalWay(PathIO, map_rows)
-#             start_str = str(x_end) + "," + str(y_end)
-#             end_str = str(backPoint[0]) + "," + str(backPoint[1])
-#
-#             # pathDetail = convertCrossPoint2FinalWay(PathIO, map_rows)
-#             # PathIO = convertWay2String(PathIO)
-#             # pathDetail = convertWay2String(pathDetail)
-#             # importWayBack(name="", path=PathIO, pdetail=pathDetail, cost="", start=start_str, end=end_str,
-#             #             goal=end_str)
-#             re.set_coordinate_wayBack_to_redis(PathIO, start_str, end_str)
-#         # print("==================================")
-
-# Tìm đường về từ các điểm delivery
 for outport in arrDelivery:
     x_end, y_end = outport
     backPoints = []
-    # backPoints = caculatePointBack(
-    #     point=[x_end, y_end], arrBack=arrBack, num_way=5
-    # )  # using manhattan distance to find the point back.
     for point in arrBack:
         if x_end == point[0]:
             backPoints = [point]
@@ -326,4 +277,3 @@ for outport in arrDelivery:
             start_str = str(x_end) + "," + str(y_end)
             end_str = str(backPoint[0]) + "," + str(backPoint[1])
             re.set_coordinate_wayBack_to_redis(PathIO, start_str, end_str)
-#         # print("==================================")

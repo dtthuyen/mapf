@@ -9,7 +9,7 @@ import numpy as np
 import paho.mqtt.client as mqtt
 import pygame
 
-from routing import BFS
+from routing import BFS, BFS_multi
 from utils import loadPointPort, manhattanDistance
 
 ID_CHECK = None
@@ -20,7 +20,7 @@ arrOutPort = loadPointPort("csv_file/arrOut2.csv")
 arrOutPort_check_pos = loadPointPort("csv_file/arrOutput.csv")
 arrQueue = loadPointPort("csv_file/arrQueue.csv")
 arrInPort = loadPointPort("csv_file/arrInput.csv")
-arrInit = loadPointPort("csv_file/arrInit.csv")
+arrInit = loadPointPort("csv_file/arrQueue.csv")
 arrCollision = loadPointPort("csv_file/arrCollision.csv")
 arrBack = loadPointPort("csv_file/arrBack.csv")
 rd.seed(123)
@@ -133,8 +133,7 @@ def toQueue(id, graph, robot_list: list, checkpoint: np.ndarray = np.array([])):
     index_sort = np.argsort(distance)
 
     vis_temp = vis.copy()
-    change_path = BFS(list_vertices, vis_temp, start_point[1], start_point[0])
-    print('huyen',list_vertices, vis_temp, start_point[1], start_point[0], id)
+    change_path = BFS_multi(list_vertices, vis_temp, start_point[1], start_point[0])
     if change_path is None:
         return
     x_plus = cur_pos_x - start_point[0]
@@ -645,7 +644,7 @@ class Robot:
 
 
 robot_list = list()
-num_robot = 200
+num_robot = 50
 for i in range(1, num_robot+1):
     index = rd.randint(1, len(arrInit) - 1)
     coor = arrInit[index]

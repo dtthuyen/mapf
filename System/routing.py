@@ -1,5 +1,7 @@
 from collections import deque as queue
 import numpy as np
+import heapq
+
 
 dRow = [-1, 0, 1, 0]
 dCol = [0, 1, 0, -1]
@@ -47,25 +49,24 @@ class MultiQueue:
     def append(self, item, queue_index):
         self.queues[queue_index].append(item)
 
-    def popleft(self, queue_index):
-        return self.queues[queue_index].popleft()
+    def popleft(self, queue_index, default=None):
+        return self.queues[queue_index].popleft() if self.queues[queue_index] else default
 
     def __bool__(self):
         return any(self.queues)
 
 
-def bfs_multi(grid, vis, row, col):
+
+def BFS_multi(grid, vis, row, col):
     expands = []
-    n_queues = np.where(grid > 0)
-    q = MultiQueue(len(n_queues))
-    q.append((col, row), grid[col][row])
+    pq = [(0, col, row)]
     vis[row][col] = True
 
     stop = False
-    while q.__bool__():
-        cell = q.popleft(grid[col][row])
-        x = cell[0]
-        y = cell[1]
+    while (len(pq) > 0):
+        cell = heapq.heappop(pq)
+        x = cell[1]
+        y = cell[2]
         if not stop:
             expands.append([x, y])
         if grid[y][x] == -1:
@@ -75,7 +76,8 @@ def bfs_multi(grid, vis, row, col):
             adjx = x + dRow[i]
             adjy = y + dCol[i]
             if isValid(vis, adjy, adjx, grid.shape):
-                q.append((adjx, adjy), grid[adjy][adjx])
+                priority = abs(adjx - col) + abs(adjy - row)
+                heapq.heappush(pq, (priority, adjx, adjy))
                 vis[adjy][adjx] = True
     x, y = expands[-1]
     if grid[y][x] != -1:
@@ -84,6 +86,8 @@ def bfs_multi(grid, vis, row, col):
         return None
     pathFinal = findPath_ver2(expands, np.arange(400).reshape(20, 20))
     return pathFinal
+
+
 
 
 def BFS(grid, vis, row, col):

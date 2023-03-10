@@ -10,8 +10,8 @@ import time
 
 import redis
 
-r = redis.Redis(host="127.0.0.1", port=6379, db=14, password="")
-rb = redis.Redis(host="127.0.0.1", port=6379, db=15, password="")
+r = redis.Redis(host="127.0.0.1", port=6379, db=4, password="")
+rb = redis.Redis(host="127.0.0.1", port=6379, db=5, password="")
 
 
 def set_coordinate_to_redis(path, start, end):

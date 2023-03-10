@@ -30,9 +30,7 @@ def read_csv(filename):
     return map_data
 
 
-# arrMap = read_csv("csv_file/map350danhdauvitri.csv")
-arrMap = read_csv("csv_file/mapConvert.csv")
-# arrMap = read_csv("csv_file/convert2.csv")
+arrMap = read_csv("csv_file/minimap.csv")
 def draw(arrVarMap):
     j = 2
     x = 0
@@ -50,7 +48,6 @@ def draw(arrVarMap):
                     ),
                     1,
                 )
-                # blit_text(screen, '+', ((i + 1) * TILE_SIZE + 4, j * TILE_SIZE), font2)
             if point[i] == "2": #diem nhan hang
                 pygame.draw.rect(
                     screen,
@@ -105,12 +102,10 @@ def on_message_location(client, obj, msg):
 
 
 def on_publish(client, obj, mid):
-    # print("mid: " + str(mid))
     pass
 
 
 def on_subscribe(client, obj, mid, granted_qos):
-    # print("Subscribed: " + str(mid) + " " + str(granted_qos))
     pass
 
 
@@ -186,13 +181,6 @@ def blit_text(surface, text, pos, font, color=pygame.Color("black")):
         x = pos[0]  # Reset the x.
         y += word_height  # Start on new row.
 
-#|  So AGV online:   225          | 
-text = f"""
----------------------------------------------
-|  So cua nhan hang:   38         |
-|  So cong tra hang:   360         |
----------------------------------------------
-"""
 label1 = """Bat dau chuong trinh"""
 label2 = """Bat tat AGV"""
 font = pygame.font.SysFont("Arial", 20)
@@ -208,13 +196,6 @@ while run:
     if start_button.draw(screen):
         client.publish("server", payload="start".encode(), qos=0, retain=False)
         print("start")
-    # if exit_button.draw(screen):
-    #     client.publish("server", payload="stop".encode(), qos=0, retain=False)
-    #     print("stop")
-    # if on_button.draw(screen):
-    #     print("on")
-    # if off_button.draw(screen):
-    #     print("off")
     for item in device.copy():
         data = device[item].split("/")
         x = float(data[0])
@@ -226,10 +207,6 @@ while run:
             pygame.draw.circle(screen, (0, 0, 255), [matrix(x), matrix(y)], 4)
         else:
             pygame.draw.circle(screen, (255, 0, 0), [matrix(x), matrix(y)], 4)
-    # blit_text(screen, label1, (720, 50), font)#920, 20
-    blit_text(screen, text, (720, 240), font)#900, 300
-    # blit_text(screen, label2, (720, 510), font)#950, 720
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
