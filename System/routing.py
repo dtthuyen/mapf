@@ -54,29 +54,32 @@ class MultiQueue:
         return any(self.queues)
 
 
-def bfs_multi(grid, vis, row, col):
+def multiQueueBFS(grid, vis, row, col):
     expands = []
-    n_queues = np.where(grid > 0)
-    q = MultiQueue(len(n_queues))
-    q.append((col, row), grid[col][row])
+    q = [queue() for i in range(grid.size)]
+    q[0].append((col, row))
     vis[row][col] = True
 
     stop = False
-    while q.__bool__():
-        cell = q.popleft(grid[col][row])
-        x = cell[0]
-        y = cell[1]
-        if not stop:
-            expands.append([x, y])
-        if grid[y][x] == -1:
-            stop = True
+    for depth in range(grid.size):
+        while (len(q[depth]) > 0):
+            cell = q[depth].popleft()
+            x = cell[0]
+            y = cell[1]
+            if not stop:
+                expands.append([x, y])
+            if grid[y][x] == -1:
+                stop = True
+                break
+            for i in range(4):
+                adjx = x + dRow[i]
+                adjy = y + dCol[i]
+                if isValid(vis, adjy, adjx, grid.shape):
+                    q[depth+1].append((adjx, adjy))
+                    vis[adjy][adjx] = True
+        if stop:
             break
-        for i in range(4):
-            adjx = x + dRow[i]
-            adjy = y + dCol[i]
-            if isValid(vis, adjy, adjx, grid.shape):
-                q.append((adjx, adjy), grid[adjy][adjx])
-                vis[adjy][adjx] = True
+
     x, y = expands[-1]
     if grid[y][x] != -1:
         return None

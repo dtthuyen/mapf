@@ -9,7 +9,7 @@ import numpy as np
 import paho.mqtt.client as mqtt
 import pygame
 
-from routing import BFS
+from routing import BFS, multiQueueBFS
 from utils import loadPointPort, manhattanDistance
 
 ID_CHECK = None
@@ -133,8 +133,8 @@ def toQueue(id, graph, robot_list: list, checkpoint: np.ndarray = np.array([])):
     index_sort = np.argsort(distance)
 
     vis_temp = vis.copy()
-    change_path = BFS(list_vertices, vis_temp, start_point[1], start_point[0])
-    print('huyen',list_vertices, vis_temp, start_point[1], start_point[0], id)
+    change_path = multiQueueBFS(list_vertices, vis_temp, start_point[1], start_point[0])
+    # print('huyen',list_vertices, vis_temp, start_point[1], start_point[0], id)
     if change_path is None:
         return
     x_plus = cur_pos_x - start_point[0]
@@ -645,7 +645,7 @@ class Robot:
 
 
 robot_list = list()
-num_robot = 200
+num_robot = 250
 for i in range(1, num_robot+1):
     index = rd.randint(1, len(arrInit) - 1)
     coor = arrInit[index]
