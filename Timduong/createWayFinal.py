@@ -264,41 +264,6 @@ for i in tqdm(range(len(list_IOway))):
         #             goal=goal)
         PathIO = convertCrossPoint2FinalWay(PathIO, map_rows)
         re.set_coordinate_to_redis(PathIO, IO_point[0], IO_point[1])
-#
-# print(
-#     "=================== Tìm đường về từ outport về đường default ==========================="
-# )
-
-# create way back to default path
-# for outport in finalBaseLineDict.keys():
-#     baseLine = finalBaseLineDict[outport]
-#     endPoint = baseLine["end"]
-#     x_end, y_end = pMatrixInt(endPoint)
-#     backPoints = caculatePointBack(
-#         point=[x_end, y_end], arrBack=arrBack, num_way=5
-#     )  # using manhattan distance to find the point back.
-#     for backPoint in backPoints:
-#         src = mPoint(x_end, y_end)
-#         goal = mPoint(backPoint[0], backPoint[1])
-#         PathIO = graphMap.a_star_algorithm(src, goal)
-#         if PathIO is None:
-#             print("khong tim thay duong {}".format((x_end, y_end, backPoint)))
-#             print(graphMap.graph[mPoint(1, 2)][0].dest)
-#             assert "Khong tim thay duong"
-#         else:
-#             path1d = convertWay1dToString(PathIO)
-#             PathIO = convertWay(PathIO)
-#             PathIO = convertCrossPoint2FinalWay(PathIO, map_rows)
-#             start_str = str(x_end) + "," + str(y_end)
-#             end_str = str(backPoint[0]) + "," + str(backPoint[1])
-#
-#             # pathDetail = convertCrossPoint2FinalWay(PathIO, map_rows)
-#             # PathIO = convertWay2String(PathIO)
-#             # pathDetail = convertWay2String(pathDetail)
-#             # importWayBack(name="", path=PathIO, pdetail=pathDetail, cost="", start=start_str, end=end_str,
-#             #             goal=end_str)
-#             re.set_coordinate_wayBack_to_redis(PathIO, start_str, end_str)
-#         # print("==================================")
 
 # Tìm đường về từ các điểm delivery
 for outport in arrDelivery:

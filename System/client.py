@@ -14,6 +14,7 @@ from utils import loadPointPort, manhattanDistance
 
 ID_CHECK = None
 TILE_SIZE = 12
+num_robot = 200
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.CRITICAL)
 arrOutPort = loadPointPort("csv_file/arrOut2.csv")
@@ -645,7 +646,7 @@ class Robot:
 
 
 robot_list = list()
-num_robot = 250
+
 for i in range(1, num_robot+1):
     index = rd.randint(1, len(arrInit) - 1)
     coor = arrInit[index]

@@ -1,5 +1,6 @@
 from collections import deque as queue
 import numpy as np
+import queue as _queue
 
 dRow = [-1, 0, 1, 0]
 dCol = [0, 1, 0, -1]
@@ -127,3 +128,87 @@ if __name__ == '__main__':
                [0, 2], [1, 3], [2, 0], [7, 6], [9, 6], [10, 5]]
     path = findPath_ver2(expands, np.arange(400).reshape(20, 20))
     print(path)
+
+def bidirectionalBFS(grid, start, end):
+    n = grid.shape[0]
+    vis_start = np.zeros((n, n), dtype=bool)
+    vis_end = np.zeros((n, n), dtype=bool)
+    q_start = queue()
+    q_end = queue()
+    q_start.append(start)
+    q_end.append(end)
+    vis_start[start] = True
+    vis_end[end] = True
+
+    while q_start and q_end:
+        if len(q_start) <= len(q_end):
+            cell = q_start.popleft()
+            x = cell[0]
+            y = cell[1]
+            if vis_end[y][x]:
+                path = findPath_ver2([cell]+expands_end[::-1], grid)
+                return path
+            for i in range(4):
+                adjx = x + dRow[i]
+                adjy = y + dCol[i]
+                if isValid(vis_start, adjy, adjx, grid.shape):
+                    q_start.append((adjx, adjy))
+                    vis_start[adjy][adjx] = True
+                    if vis_end[adjy][adjx]:
+                        path = findPath_ver2([cell]+expands_end[::-1], grid)
+                        return path
+        else:
+            cell = q_end.popleft()
+            x = cell[0]
+            y = cell[1]
+            if vis_start[y][x]:
+                path = findPath_ver2(expands_start+[cell], grid)
+                return path
+            for i in range(4):
+                adjx = x + dRow[i]
+                adjy = y + dCol[i]
+                if isValid(vis_end, adjy, adjx, grid.shape):
+                    q_end.append((adjx, adjy))
+                    vis_end[adjy][adjx] = True
+                    if vis_start[adjy][adjx]:
+                        path = findPath_ver2(expands_start+[cell], grid)
+                        return path
+
+    return None
+    
+def BFS_multi_queue(grid, vis, row, col):
+    expands = []
+    q = [_queue.Queue() for _ in range(grid.shape[0] * grid.shape[1])]
+    q[0].put((col, row))
+    vis[row][col] = True
+
+    stop = False
+    cur_level = 0
+    while (not stop) and (cur_level < len(q)):
+        level_size = q[cur_level].qsize()
+        for _ in range(level_size):
+            cell = q[cur_level].get()
+            x = cell[0]
+            y = cell[1]
+            if not stop:
+                expands.append([x, y])
+            if grid[y][x] == -1:
+                stop = True
+                break
+            for i in range(4):
+                adjx = x + dRow[i]
+                adjy = y + dCol[i]
+                if isValid(vis, adjy, adjx, grid.shape):
+                    if not vis[adjy][adjx]:
+                        q[cur_level + 1].put((adjx, adjy))
+                        vis[adjy][adjx] = True
+        cur_level += 1
+    
+    x, y = expands[-1]
+    if grid[y][x] != -1:
+        return None
+    if len(expands) == 1:
+        return None
+    pathFinal = findPath_ver2(expands, np.arange(400).reshape(20, 20))
+    return pathFinal
+
