@@ -105,12 +105,10 @@ def on_message_location(client, obj, msg):
 
 
 def on_publish(client, obj, mid):
-    # print("mid: " + str(mid))
     pass
 
 
 def on_subscribe(client, obj, mid, granted_qos):
-    # print("Subscribed: " + str(mid) + " " + str(granted_qos))
     pass
 
 
@@ -235,5 +233,5 @@ while run:
             run = False
     pygame.display.update()
     clock.tick(30)
-print("check")
+
 pygame.quit()

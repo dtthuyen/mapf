@@ -14,7 +14,7 @@ from utils import loadPointPort, manhattanDistance
 
 ID_CHECK = None
 TILE_SIZE = 12
-num_robot = 200
+num_robot = 20
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.CRITICAL)
 arrOutPort = loadPointPort("csv_file/arrOut2.csv")
@@ -22,44 +22,10 @@ arrOutPort_check_pos = loadPointPort("csv_file/arrOutput.csv")
 arrQueue = loadPointPort("csv_file/arrQueue.csv")
 arrInPort = loadPointPort("csv_file/arrInput.csv")
 arrInit = loadPointPort("csv_file/arrInit.csv")
-arrCollision = loadPointPort("csv_file/arrCollision.csv")
-arrBack = loadPointPort("csv_file/arrBack.csv")
 rd.seed(123)
 
 index_x = [7, 10, 13, 16, 19, 22, 25, 28, 31, 34, 37, 40, 43, 46, 49, 52, 55, 58, 61]
 index_y = [[5, 6], [64, 65]]
-down_point = np.array([i for i in range(7, 65, 3)])
-up_point = np.array([i for i in range(5, 63, 3)])
-
-def check_pos_new1(x, y):
-    RoamMap1 = {
-        1: [[3, 2], [3, 6], [32, 6], [32, 2]],
-        2: [[64, 2], [64, 5], [35, 5], [35, 2]],
-        3: [[2, 68], [2, 65], [34, 65], [34, 68]],
-        4: [[67, 68], [67, 64], [37, 64], [37, 68]],
-    }
-    endPoint = None
-    for point in arrBack:
-        if x == point[0]:
-            endPoint = point
-            break
-    x, y = endPoint
-    if y == 2:
-        if x < 33:
-            return RoamMap1[1]
-        elif x > 33:
-            return RoamMap1[2]
-    elif y == 68:
-        if x < 35:
-            return RoamMap1[3]
-        elif x > 35:
-            return RoamMap1[4]
-
-
-def check_in_RoamMap(x, y):
-    if x in [1, 68] or y in [2, 68]:
-        return True
-    return False
 
 
 def json2arr(jsondata) -> list:
@@ -203,8 +169,6 @@ def checkTraffic(robot, check_pos: np.ndarray, new_point_early: list):
             return True
 
 
-pph = 0  # package per hour
-ppm = 0  # package per minute
 total_package = 0
 start_time = 0
 

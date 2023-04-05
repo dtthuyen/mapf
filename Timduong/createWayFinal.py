@@ -160,7 +160,7 @@ for inPort in arrIP:
             )
         )
 
-print(len(allEdges))
+
 graphMap = Graph(len(allEdges))
 graphMap.addEdge(edges=allEdges)
 

@@ -34,9 +34,9 @@ arrOutput = loadPointPort("csv_file/arrOutput.csv")
 arrDelivery = loadPointPort("csv_file/arrDelivery.csv")
 arrCrossPoint = loadPointPort("csv_file/arrPoint.csv")
 
-r = redis.Redis(host="localhost", port=6379, db=1, password="")
-r2 = redis.Redis(host="localhost", port=6379, db=15, password="")  # Db đường về
-r3 = redis.Redis(host="localhost", port=6379, db=14, password="")
+r = redis.Redis(host="localhost", port=6379, db=3, password="")
+r2 = redis.Redis(host="localhost", port=6379, db=5, password="")  # Db đường về
+r3 = redis.Redis(host="localhost", port=6379, db=4, password="")
 
 RoamMap1 = {
     1: [[3, 2], [3, 6], [32, 6], [32, 2]],
