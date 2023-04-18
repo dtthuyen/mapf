@@ -30,9 +30,9 @@ def read_csv(filename):
     return map_data
 
 
-# arrMap = read_csv("csv_file/map350danhdauvitri.csv")
-arrMap = read_csv("csv_file/mapConvert.csv")
-# arrMap = read_csv("csv_file/convert2.csv")
+arrMap = read_csv("csv_file/map350danhdauvitri.csv")
+# arrMap = read_csv("csv_file/mapConvert.csv")
+
 def draw(arrVarMap):
     j = 2
     x = 0

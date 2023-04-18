@@ -14,7 +14,7 @@ from utils import loadPointPort, manhattanDistance
 
 ID_CHECK = None
 TILE_SIZE = 12
-num_robot = 20
+num_robot = 200
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.CRITICAL)
 arrOutPort = loadPointPort("csv_file/arrOut2.csv")
@@ -128,7 +128,7 @@ def checkTraffic(robot, check_pos: np.ndarray, new_point_early: list):
     startX, startY = robot.x, robot.y
     cur_pos_x = startX
     cur_pos_y = startY
-    r = 5
+    r = 3
     rangeX = [cur_pos_x - r, cur_pos_x + r]
     rangeY = [cur_pos_y - r, cur_pos_y + r]
 
